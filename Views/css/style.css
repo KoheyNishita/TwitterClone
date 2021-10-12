@@ -229,7 +229,7 @@ Home
     border: 1px solid #eef;
 }
 
-.post-image { /* このプロパティは上記（223-229）が反応しなかったので記入。もしCSSでプロパティが反応しなかったら、このように単体で記入 */
+.post-image { /* このプロパティは上記（224-230）が反応しなかったので記入。もしCSSでプロパティが反応しなかったら、このように単体で記入 */
     width: 100%;
     border-radius: 15px;
     margin-bottom: 10px;

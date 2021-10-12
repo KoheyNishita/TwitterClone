@@ -35,6 +35,29 @@ $view_tweets = [
     ]
 ];
 
+////////////////////////
+// 便利な関数
+////////////////////////
+/**
+ * 指定した日時からどれだけ経過したかを取得する関数
+ * 
+ * @param string $datetime 日時 ...paramは引数
+ * @return string ...returnは戻り値の情報
+ */
+function convertToDayTimeAgo(string $datetime)
+{
+    $unix = strtotime($datetime); // unixは1970年1月1日から数えた日時
+    $now = time();
+    $diff_sec = $now - $unix;
+
+    if (date('Y') !== date('Y', $unix)) { // 現在の年と投稿日時が違う場合
+        $time = date('Y年n月j日', $unix); // true : 年月日を返す
+    } else {
+        $time = date('n月j日', $unix); // false : 同じであれば月と日にちを返す
+    }
+    return $time;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -100,15 +123,15 @@ $view_tweets = [
                     <?php foreach($view_tweets as $view_tweet) : ?>
                         <div class="tweet">
                             <div class="user">
-                                <a href="profile.php?user_id=<?php echo $view_tweet['user_id']; ?>">
-                                <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/<?php echo $view_tweet['user_image_name']; ?>" alt="アイコン">
+                                <a href="profile.php?user_id=<?php echo htmlspecialchars($view_tweet['user_id']); ?>">
+                                <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/<?php echo htmlspecialchars($view_tweet['user_image_name']); ?>" alt="アイコン">
                                 </a>
                             </div>
                             <div class="content">
                                 <div class="name">
-                                    <a href="profile.php?user_id=<?php echo $view_tweet['user_id']; ?>">
-                                        <span class="nickname"><?php echo $view_tweet['user_nickname']; ?></span>
-                                        <span class="user-name">@<?php echo $view_tweet['user_name']; ?> ・ <?php echo $view_tweet['tweet_created_at']; ?></span>
+                                    <a href="profile.php?user_id=<?php echo htmlspecialchars($view_tweet['user_id']); ?>">
+                                        <span class="nickname"><?php echo htmlspecialchars($view_tweet['user_nickname']); ?></span>
+                                        <span class="user-name">@<?php echo htmlspecialchars($view_tweet['user_name']); ?> ・ <?php echo convertToDayTimeAgo($view_tweet['tweet_created_at']); ?></span>
                                     </a>
                                 </div>
                                 <p><?php echo $view_tweet['tweet_body']; ?></p>
@@ -127,7 +150,7 @@ $view_tweets = [
                                         }
                                         ?>
                                     </div>
-                                    <div class="like-count"><?php echo $view_tweet['like_count']; ?></div>
+                                    <div class="like-count"><?php echo htmlspecialchars($view_tweet['like_count']); ?></div>
                                 </div>
                             </div>
                         </div>
