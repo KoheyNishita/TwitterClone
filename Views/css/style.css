@@ -41,13 +41,14 @@ All もしChromeでcssと同期されなくなったらスーパーリロード�
     color: #fff;
     font-size: 15px;
     font-weight: bold;
+    float: right;
 }
 
 .btn:hover {
     color: #fff;
 }
-
 /* :hoverは要素にカーソルが重なったときを指す*/
+
 a {
     text-decoration: none;
 }
@@ -90,7 +91,8 @@ Side
 
 @media screen and (max-width: 500px) {
     .side .side-inner img {
-        width: 70% margin-bottom: 15px;
+        width: 70%;
+        margin-bottom: 15px;
     }
 
     .side .side-inner img.icon {
@@ -155,8 +157,8 @@ Home
 .home .tweet-post .input-area textarea:focus {
     outline: none;
 }
-
 /* コロン ":" から始まるクラスを疑似クラスという。:focusは要素が選択されたときのクラス */
+
 .home .tweet-post .input-area .bottom-area {
     display: flex;
     flex-wrap: wrap;
@@ -164,8 +166,8 @@ Home
     border-top: 1px solid #eef;
     padding-top: 8px;
 }
-
 /* flex-wrap：がwrapだと、端末の画面が狭いときに要素が横並びから改行（？）される */
+
 .home .ditch {
     height: 15px;
     background-color: #f7f8f8;
@@ -219,7 +221,15 @@ Home
     margin-bottom: 8px;
 }
 
-.home .tweet-list .tweet .content img.post-image {
+.home .tweet-list .tweet .content img .post-image {
+    width: 100%;
+    border-radius: 15px;
+    margin-bottom: 10px;
+    margin-right: 5px;
+    border: 1px solid #eef;
+}
+
+.post-image { /* このプロパティは上記（223-229）が反応しなかったので記入。もしCSSでプロパティが反応しなかったら、このように単体で記入 */
     width: 100%;
     border-radius: 15px;
     margin-bottom: 10px;
