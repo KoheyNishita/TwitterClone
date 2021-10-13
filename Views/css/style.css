@@ -50,6 +50,8 @@ All もしChromeでcssと同期されなくなったらスーパーリロード�
 /* :hoverは要素にカーソルが重なったときを指す*/
 
 a {
+    font-size: 13px;
+    color: #1af;
     text-decoration: none;
 }
 
