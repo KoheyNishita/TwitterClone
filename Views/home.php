@@ -30,14 +30,35 @@ $view_tweets = [
         'tweet_body' => 'コワーキングスペースをオープンしました！',
         'tweet_image_name' => 'sample-post.jpg',
         'tweet_created_at' => '2021-03-15 14:12:00',
-        'like_id' => 1,
+        'like_id' => 1, // data-（データハイフン）という関数を使い data-like-id と書くことで、like-idが取得できる
         'like_count' => 1
     ]
 ];
 
+// htmlファイルでの「data-」関数は、プログラマーが自由に使っていいもの
+// Webサイト上には表示されないので、ここに適当な数字などを代入できる
+// data-like-idにすると、like-idに何かしらのデータが代入できるようになる
+
 ////////////////////////
 // 便利な関数
 ////////////////////////
+
+/**
+ * 画像ファイル名から画像のURLを生成する
+ *
+ * @param string $name 画像ファイル名
+ * @param string $type user | tweet
+ * @return string
+ */
+function buildImagePath(string $name = null, string $type) // 第一引数にはnullを許容 → 画像投稿のないツイートも許容
+{
+    if ($type === 'user' && !isset($name)) {
+        return HOME_URL . 'Views/img/icon-default-user.svg';
+    }
+
+    return HOME_URL . 'Views/img_uploaded/' . $type . '/' . htmlspecialchars($name);
+}
+
 /**
  * 指定した日時からどれだけ経過したかを取得する関数
  * 
@@ -50,13 +71,31 @@ function convertToDayTimeAgo(string $datetime)
     $now = time();
     $diff_sec = $now - $unix;
 
-    if (date('Y') !== date('Y', $unix)) { // 現在の年と投稿日時が違う場合
-        $time = date('Y年n月j日', $unix); // true : 年月日を返す
+    if($diff_sec < 60) {
+        $time = $diff_sec;
+        $unit = '秒前';
+    } elseif ($diff_sec < 3600) { // 3600秒 = 1時間。1時間以内の投稿の場合は「○○分前」と表示する
+        $time = $diff_sec / 60;
+        $unit = '分前';
+    } elseif ($diff_sec < 86400) { // 86400秒 = 24時間（1日）。1日以内の投稿は「○○時間前」にする
+        $time = $diff_sec / 3600;
+        $unit ='時間前';
+    } elseif ($diff_sec < 2764800) { // 2764800秒 = 32日。32日（大体1か月）未満なら「○○」日前にする
+        $time = $diff_sec / 86400;
+        $unit = '日前';
     } else {
-        $time = date('n月j日', $unix); // false : 同じであれば月と日にちを返す
-    }
-    return $time;
+
+        if (date('Y') !== date('Y', $unix)) {
+            $time = date('Y年n月j日', $unix);
+        } else {
+            $time = date('n月j日', $unix);
+        }
+        return $time;
 }
+
+return (int)$time . $unit;
+}
+// (int)は型キャストといい、型を変換する。intの場合は、intで変換できないものは0になり、小数点がある場合は切り捨て
 
 ?>
 <!DOCTYPE html>
@@ -72,6 +111,10 @@ function convertToDayTimeAgo(string $datetime)
     <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
     <!-- JavaScript Bundle with Popper  これは上のJS jQueryに依存しているのでその下に書く-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" defer></script>
+    <!-- いいね！ボタンのJS -->
+    <script src="<?php echo HOME_URL; ?>Views/js/likes.js" defer></script>
+    <!-- JSのファイルにdefer属性を指定すると、JSの読み込みを遅らせる→HTML全体の読み込みが優先され、ページが早く読み込まれる -->
+    <!-- 通常読み込まれるScriptが、deferありのScriptに依存しているとエラーが起こる場合アリ -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <!-- 複数のCSSファイルを読み込んだ際に干渉すると、後のものが優先される -->
     <title>ホーム画面 / Twitterクローン</title>
@@ -92,7 +135,11 @@ function convertToDayTimeAgo(string $datetime)
                 <li class="nav-item my-icon"><img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/sample-person.jpg" alt="自分のアイコン" class="js-popover" 
                 data-bs-container="body" data-bs-toggle="popover" data-bs-placement="right" data-bs-html="true" 
                 data-bs-content="<a href='profile.php'>プロフィール</a><br><a href='sign-out.php'>ログアウト</a>"
-                ></li><!-- コンテナオプションにBodyを指定することで親要素のスタイルの影響を受けにくくなる -->
+                ></li>
+                <!-- containerにbodyを指定することで親要素のスタイルの影響を受けにくくなる -->
+                <!-- toggleにはpopover -->
+                <!-- placementはrightで、対象（ユーザーアイコン）の右側に表示 -->
+                <!-- html="true"で、これ以下のコードをHTMLに変換する -->
                 </ul>
             </div>
         </div>
@@ -131,7 +178,7 @@ function convertToDayTimeAgo(string $datetime)
                         <div class="tweet">
                             <div class="user">
                                 <a href="profile.php?user_id=<?php echo htmlspecialchars($view_tweet['user_id']); ?>">
-                                <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/<?php echo htmlspecialchars($view_tweet['user_image_name']); ?>" alt="アイコン">
+                                    <img src="<?php echo buildImagePath($view_tweet['user_image_name'], 'user'); ?>" alt="アイコン">
                                 </a>
                             </div>
                             <div class="content">
@@ -144,11 +191,11 @@ function convertToDayTimeAgo(string $datetime)
                                 <p><?php echo $view_tweet['tweet_body']; ?></p>
 
                                 <?php if (isset($view_tweet['tweet_image_name'])): ?>
-                                    <img src="<?php echo HOME_URL; ?>Views/img_uploaded/tweet/<?php echo $view_tweet['tweet_image_name']; ?>" alt="" class="post-image">
+                                    <img src="<?php echo buildImagePath($view_tweet['tweet_image_name'], 'tweet'); ?>" alt="" class="post-image">
                                 <?php endif; ?>
 
                                 <div class="icon-list">
-                                    <div class="like">
+                                    <div class="like js-like" data-like-id="<?php echo htmlspecialchars($view_tweet['like_id']); ?>">
                                         <?php
                                         if (isset($view_tweet['like_id'])) {
                                             echo '<img src="' . HOME_URL . 'Views/img/icon-heart-twitterblue.svg" alt="">'; // いいね！あり
@@ -157,7 +204,7 @@ function convertToDayTimeAgo(string $datetime)
                                         }
                                         ?>
                                     </div>
-                                    <div class="like-count"><?php echo htmlspecialchars($view_tweet['like_count']); ?></div>
+                                    <div class="like-count js-like-count"><?php echo htmlspecialchars($view_tweet['like_count']); ?></div>
                                 </div>
                             </div>
                         </div>

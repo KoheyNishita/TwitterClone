@@ -47,8 +47,8 @@ All もしChromeでcssと同期されなくなったらスーパーリロード�
 .btn:hover {
     color: #fff;
 }
-/* :hoverは要素にカーソルが重なったときを指す*/
 
+/* :hoverは要素にカーソルが重なったときを指す*/
 a {
     font-size: 13px;
     color: #1af;
@@ -159,8 +159,8 @@ Home
 .home .tweet-post .input-area textarea:focus {
     outline: none;
 }
-/* コロン ":" から始まるクラスを疑似クラスという。:focusは要素が選択されたときのクラス */
 
+/* コロン ":" から始まるクラスを疑似クラスという。:focusは要素が選択されたときのクラス */
 .home .tweet-post .input-area .bottom-area {
     display: flex;
     flex-wrap: wrap;
@@ -168,8 +168,8 @@ Home
     border-top: 1px solid #eef;
     padding-top: 8px;
 }
-/* flex-wrap：がwrapだと、端末の画面が狭いときに要素が横並びから改行（？）される */
 
+/* flex-wrap：がwrapだと、端末の画面が狭いときに要素が横並びから改行（？）される */
 .home .ditch {
     height: 15px;
     background-color: #f7f8f8;
@@ -231,7 +231,8 @@ Home
     border: 1px solid #eef;
 }
 
-.post-image { /* このプロパティは上記（224-230）が反応しなかったので記入。もしCSSでプロパティが反応しなかったら、このように単体で記入 */
+.post-image {
+    /* このプロパティは上記（224-230）が反応しなかったので記入。もしCSSでプロパティが反応しなかったら、このように単体で記入 */
     width: 100%;
     border-radius: 15px;
     margin-bottom: 10px;
