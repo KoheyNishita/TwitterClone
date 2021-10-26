@@ -1,43 +1,38 @@
+<?php
+// 設定関連を読み込む
+include_once('../config.php'); // includeという関数で他のPHPファイルを読み込む。include_onceなら一度だけ読み込む
+// 便利な関数を読み込む
+include_once('../util.php');
+
+///////////////////////////////////
+// ツイート一覧
+///////////////////////////////////
+$view_tweets = [
+    [
+        'user_id' => 1,
+        'user_name' => 'taro',
+        'user_nickname' => '太郎',
+        'user_image_name' => 'sample-person.jpg',
+        'tweet_body' => 'プログラミング中！',
+        'tweet_image_name' => null, // 画像投稿なし = null
+        'tweet_created_at' => '2021-03-15 14:00:00', // 本来は投稿からどれだけ経ったかを表示するが、変換処理を後で行う
+        'like_id' => null, // いいねがない場合はnull、ある場合は1になる
+        'like_count' => 0
+    ],
+];
+?>
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="../Views/img/logo-twitterblue.svg">
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
-    <link rel="stylesheet" href="../Views/css/style.css">
-        <!-- 複数のCSSファイルを読み込んだ際に干渉すると、後のものが優先される -->
-    <!-- JS jQuery-->
-    <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous" defer></script>
-    <!-- JavaScript Bundle with Popper  これは上のJS jQueryに依存しているのでその下に書く-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" defer></script>
-    <!-- いいね！ボタンのJS -->
-    <script src="../Views/js/likes.js" defer></script>
-    <!-- JSのファイルにdefer属性を指定すると、JSの読み込みを遅らせる→HTML全体の読み込みが優先され、ページが早く読み込まれる -->
-    <!-- 通常読み込まれるScriptが、deferありのScriptに依存しているとエラーが起こる場合アリ -->
-
+    <?php include_once('../Views/common/head.php'); ?>
     <title>プロフィール画面 / Twitterクローン</title>
     <meta name="desctiption" content="プロフィール画面">
 </head>
 
 <body class="home profile text-center">
     <div class="container">
-        <div class="side">
-            <div class="side-inner">
-                <ul class="nav flex-column"> <!-- navから始まるのはbootstrapのクラス -->
-                    <li class="nav-item"><a href="home.php" class="nav-link"><img src="../Views/img/logo-twitterblue.svg" alt="サイトロゴ" class="icon"></a></li>
-                    <li class="nav-item"><a href="home.php" class="nav-link"><img src="../Views/img/icon-home.svg" alt="ホーム"></a></li>
-                    <li class="nav-item"><a href="search.php" class="nav-link"><img src="../Views/img/icon-search.svg" alt="検索の虫メガネ"></a></li>
-                    <li class="nav-item"><a href="notification.php" class="nav-link"><img src="../Views/img/icon-notification.svg" alt="通知のベル"></a></li>
-                    <li class="nav-item"><a href="profile.php" class="nav-link"><img src="../Views/img/icon-profile.svg" alt="プロフの人物"></a></li>
-                    <li class="nav-item"><a href="post.php" class="nav-link"><img src="../Views/img/icon-post-tweet-twitterblue.svg" alt="青い羽" class="post_tweet"></a></li>
-                    <li class="nav-item my-icon"><img src="../Views/img_uploaded/user/sample-person.jpg" alt="自分のアイコン" class="js-popover" 
-                ></li>
-                </ul>
-            </div>
-        </div>
+        <?php include_once('../Views/common/side.php'); ?>
         <div class="main">
             <div class="main-header">
                 <h1>太郎</h1>
@@ -46,7 +41,7 @@
             <!-- プロフィールエリア -->
             <div class="profile-area">
                 <div class="top">
-                    <div class="user"><img src="../Views/img_uploaded/user/sample-person.jpg" alt="アイコン"></div>
+                    <div class="user"><img src="<?php echo HOME_URL;?>Views/img_uploaded/user/sample-person.jpg" alt="アイコン"></div>
 
                     <?php if (isset($_GET['user_id'])) : ?>
                         <!-- 相手のページ -->
@@ -70,7 +65,7 @@
                                     </div>
                                     <div class="modal-body">
                                         <div class="user">
-                                            <img src="../Views/img_uploaded/user/sample-person.jpg" alt="アイコン">
+                                            <img src="<?php echo HOME_URL;?>Views/img_uploaded/user/sample-person.jpg" alt="アイコン">
                                         </div>
                                         <div class="mb-3">
                                             <label for="" class="mb-1">プロフィール画像</label>
@@ -108,15 +103,22 @@
             <!-- 仕切りエリア -->
             <div class="ditch"></div>
 
-            <!-- ToDo: つぶやき一覧エリア -->
+            <!-- つぶやき一覧エリア -->
+            <?php if (empty($view_tweets)) : ?> <!-- この行はデータがない場合。emptyは指定した変数が空だった場合にtrueを返す -->
+                <p class="p-3">投稿がありません</p> <!-- クラスのp-3はpaddingという意味、全方向に位置レベルの余白を開ける -->
+            <?php else: ?> <!-- この行（78-94）はデータがある場合 -->
+                <div class="tweet-list">
+                    <?php foreach ($view_tweets as $view_tweet) : ?>
+                        <?php include('../Views/common/tweet.php'); ?>
+                        <!-- foreach内でinclude_onceすると、最初の1回しか読み込まれないので_onceは外す -->
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
 
         </div>
     </div>
     <!-- JSをインラインで書く場合は極力＜/body＞の閉じタグの上に書く -->
-    <script>
-        document.addEventListener ('DOMContentLoaded', function(){
-            $('.js-popover').popover();
-        }, false);
-    </script>
+    <?php include_once('../Views/common/foot.php'); ?>
 </body>
+
 </html>
