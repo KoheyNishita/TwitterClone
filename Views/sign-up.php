@@ -1,21 +1,16 @@
-<?php
-// 設定関連を読み込む
-include_once('../config.php'); // includeという関数で他のPHPファイルを読み込む。include_onceなら一度だけ読み込む
-// 便利な関数を読み込む
-include_once('../util.php');
-?>
-
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
 <?php include_once('../Views/common/head.php'); ?>
     <title>会員登録画面 / Twitterクローン</title>
     <meta name="desctiption" content="会員登録画面です">
 </head>
+
 <body class="signup text-center"> <!-- text-centerはbootstrapで中央寄せ -->
     <main class="form-signup">
         <form action="sign-up.php" method="post">
-            <img src="./img/logo-white.svg" alt="" class="logo-white">
+    <img src="<?php echo HOME_URL; ?>Views/img/logo-white.svg" alt="" class="logo-white">
             <h1>アカウントを作る</h1>
             <input type="text" class="form-control" name="nickname" placeholder="ニックネーム" maxlength="50" required autofocus>
             <input type="text" class="form-control" name="name" placeholder="ユーザー名、例) techis123" maxlength="50" required>
