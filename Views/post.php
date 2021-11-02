@@ -1,12 +1,6 @@
-<?php
-// 設定関連を読み込む
-include_once('../config.php'); // includeという関数で他のPHPファイルを読み込む。include_onceなら一度だけ読み込む
-// 便利な関数を読み込む
-include_once('../util.php');
-
-?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <?php include_once('../Views/common/head.php'); ?>
     <title>つぶやく画面 / Twitterクローン</title>
@@ -24,7 +18,7 @@ include_once('../util.php');
             <!-- つぶやき投稿エリア -->
                 <div class="tweet-post">
                     <div class="my-icon">
-                        <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/sample-person.jpg" alt="アイコン">
+                        <img src="<?php echo htmlspecialchars($view_user['image_path']); ?>" alt="">
                     </div>
                     <div class="input-area">
                         <form action="post.php" method="post" enctype="multipart/form-data">

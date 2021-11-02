@@ -36,6 +36,7 @@ $view_tweets = [
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <?php include_once('../Views/common/head.php'); ?>
     <title>検索画面 / Twitterクローン</title>

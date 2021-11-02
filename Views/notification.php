@@ -7,6 +7,7 @@ include_once('../util.php');
 ?>
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <?php include_once('../Views/common/head.php'); ?>
     <title>通知画面 / Twitterクローン</title>

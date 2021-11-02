@@ -18,6 +18,7 @@ if(!$user) {
 
 // 表示用の関数
 $view_user = $user;
+
 // ツイート一覧
 // 仮のデータです TODO:モデルから取得
 $view_tweets = [
