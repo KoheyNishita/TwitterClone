@@ -23,6 +23,7 @@ function createUser(array $data)
         echo 'MySQLの接続に失敗しました。：' . $mysqli->connect_error . "\n";
         exit;
     }
+    $mysqli->set_charset("utf8mb4");
 
     // 新規登録のSQLクエリ作成 下記の?はプレースホルダといい、後で値を挿入できる
     $query = 'INSERT INTO users (email, name, nickname, password) VALUES (?, ?, ?, ?)';

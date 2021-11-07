@@ -1,3 +1,4 @@
 # gitでcommitしたくないファイルがあるなら、
 # ここにそのファイル名を拡張子込みで記入
 .DS_Store
+.util_img_function_sample.txt
