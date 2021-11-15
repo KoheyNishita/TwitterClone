@@ -1,10 +1,3 @@
-<?php
-// 設定関連を読み込む
-include_once('../config.php'); // includeという関数で他のPHPファイルを読み込む。include_onceなら一度だけ読み込む
-// 便利な関数を読み込む
-include_once('../util.php');
-
-?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -19,7 +12,7 @@ include_once('../util.php');
         <?php include_once('../Views/common/side.php'); ?>
         <div class="main">
             <div class="main-header">
-                <h1>通知</h1>
+                <h1>通知</h1> 
             </div>
 
             <!-- 仕切りエリア -->
@@ -27,26 +20,19 @@ include_once('../util.php');
 
             <!-- 通知一覧エリア -->
             <div class="notification-list">
-                <?php if(isset($_GET['case'])): ?>
+                <?php if(empty($view_notifications)) : ?>
                     <p class="no-result">通知はまだありません。</p>
                 <?php else: ?>
-                    <div class="notification-item">
-                        <div class="user">
-                            <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/sample-person.jpg" alt="アイコン">
+                    <?php foreach ($view_notifications as $view_notification) : ?>
+                        <div class="notification-item">
+                            <div class="user">
+                                <img src="<?php echo buildImagePath($view_notification['user_image_name'], 'user' ); ?>" alt="">
+                            </div>
+                            <div class="content">
+                                <P><?php echo htmlspecialchars($view_notification['notification_message']); ?></P>
+                            </div>
                         </div>
-                        <div class="content">
-                            <P>いいね！されました。</P>
-                        </div>
-                    </div>
-
-                    <div class="notification-item">
-                        <div class="user">
-                            <img src="<?php echo HOME_URL; ?>Views/img_uploaded/user/sample-person.jpg" alt="アイコン">
-                        </div>
-                        <div class="content">
-                            <P>フォローされました。</P>
-                        </div>
-                    </div>
+                    <?php endforeach; ?>
                 <?php endif; ?>
             </div>
         </div>

@@ -18,7 +18,6 @@ function createTweet(array $data)
         echo 'MySQLの接続に失敗しました。：' . $mysqli->connect_error . "\n";
         exit;
     }
-    // $mysqli->set_charset("utf8mb4"); // MySQLにて日本語のみ文字化けが発生したため一時的に記入
 
     // 新規登録のSQLクエリを作成
     $query = 'INSERT INTO tweets (user_id, body, image_name) VALUES (?, ?, ?)';
@@ -39,6 +38,49 @@ function createTweet(array $data)
 
     // DB接続を解放
     $statement->close();
+    $mysqli->close();
+
+    return $response;
+}
+
+/**
+ * ツイート1件取得
+ * 
+ * @param int $tweet_id
+ * @return array|false
+ */
+function findTweet(int $tweet_id)
+{
+    // DB接続
+    $mysqli = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_NAME);
+    if ($mysqli->connect_errno) {
+        echo 'MySQLの接続に失敗しました。：' . $mysqli->connect_error . "\n";
+        exit;
+    }
+
+    // エスケープ
+    $tweet_id = $mysqli->real_escape_string($tweet_id);
+
+    // --------------------------------------
+    // SQLクエリを作成
+    // --------------------------------------
+    $query = 'SELECT * FROM tweets WHERE status = "active" AND id = "' . $tweet_id . '"';
+
+    // --------------------------------------
+    // 戻り値を作成
+    // --------------------------------------
+    if ($result = $mysqli->query($query)) {
+        // データ1件を取得
+        $response = $result->fetch_array(MYSQLI_ASSOC);
+    } else {
+        $response = false;
+        echo 'エラーメッセージ：' . $mysqli->error . "\n";
+    }
+
+    // --------------------------------------
+    // 後処理
+    // --------------------------------------
+    // DB接続を解放
     $mysqli->close();
 
     return $response;
