@@ -1,5 +1,4 @@
 <?php
-
 /////////////////////////////////////////
 // フォローデータを管理
 /////////////////////////////////////////
@@ -25,8 +24,8 @@ function createFollow(array $data)
     $query = 'INSERT INTO follows (follow_user_id, followed_user_id) VALUES (?, ?)';
     $statement = $mysqli->prepare($query);
 
-        // プレースホルダに値をセット
-        $statement->bind_param('ii', $data['follow_user_id'], $data['followed_user_id']);
+    // プレースホルダに値をセット
+    $statement->bind_param('ii', $data['follow_user_id'], $data['followed_user_id']);
 
     // --------------------------------------
     // 戻り値を作成
@@ -131,8 +130,8 @@ function findFollowingUserIds(int $follow_user_id)
     if (!$result) {
         echo 'エラーメッセージ：' . $mysqli->error . "\n";
         // DB接続を解放
-       $mysqli->close();
-       return false;
+        $mysqli->close();
+        return false;
     }
 
     // フォロー一覧を取得
