@@ -73,6 +73,7 @@ if (isset($_GET['user_id'])) {
 $view_user = $user;
 // プロフィール情報を取得
 $view_requested_user = findUser($requested_user_id, $user['id']);
+//var_dump( $view_requested_user );exit;
 // ツイート一覧
 $view_tweets = findTweets($user, null, [$requested_user_id]);
 

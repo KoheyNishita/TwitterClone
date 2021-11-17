@@ -29,7 +29,7 @@
             <!-- つぶやき一覧エリア -->
             <?php if (empty($view_tweets)) : ?> <!-- この行はデータがない場合。emptyは指定した変数が空だった場合にtrueを返す -->
                 <p class="p-3">投稿がありません</p> <!-- クラスのp-3はpaddingという意味、全方向に位置レベルの余白を開ける -->
-            <?php else: ?> <!-- この行（78-94）はデータがある場合 -->
+            <?php else: ?> <!-- この行はデータがある場合 -->
                 <div class="tweet-list">
                     <?php foreach ($view_tweets as $view_tweet) : ?>
                         <?php include('../Views/common/tweet.php'); ?>
