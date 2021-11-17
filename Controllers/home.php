@@ -13,7 +13,6 @@ include_once '../Models/tweets.php';
 // フォローデータ操作モデルを読み込む
 include_once '../Models/follows.php';
 
-
 // ログインチェック
 $user = getUserSession();
 if(!$user) {
