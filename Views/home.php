@@ -21,7 +21,7 @@
                         <img src="<?php echo htmlspecialchars($view_user['image_path']) ?>" alt="">
                     </div>
                     <div class="input-area">
-                        <form action="post.php" method="post" enctype="multipart/form-data"> <!-- 47行目のinput typeがファイルの場合にenctypeが必要 -->
+                        <form action="post.php" method="post" enctype="multipart/form-data"> <!-- input typeがファイルの場合にenctypeが必要 -->
                             <textarea name="body" placeholder="いまどうしてる？" maxlength="140"></textarea>
                             <div class="bottom-area">
                                 <div class="mb-0"> <!-- mb-0はbootstrapのクラス。margin-bottomになる -->

@@ -128,8 +128,14 @@ function getUserSession()
  * @param string $type
  * @return string 画像ファイル名
  */
-function uploadImage(array $user, array $file, string $type)
+function uploadImage(array $user, array $file, string $type) // TEST Version
 {
+    // 画像ファイル以外の場合->エラー表示
+    if (!exif_imagetype($file['tmp_name'])) {
+        echo '選択されたファイルが画像ではないため処理を停止しました。';
+        exit;
+    }
+    
     // 画像のファイル名から拡張子を取得（.jpg, .png, .gif, .jtifなど）
     $image_extension = strrchr($file['name'], '.');
 
@@ -149,8 +155,4 @@ function uploadImage(array $user, array $file, string $type)
     if (exif_imagetype($image_path)) {
         return $image_name;
     }
-
-    // 画像ファイル以外の場合
-    echo '選択されたファイルが画像ではないため処理を停止しました。';
-    exit;
 }
