@@ -354,6 +354,8 @@ body.signup {
 
 .profile .profile-area .top button {
     margin-bottom: 20px;
+    width: fit-content;
+    padding: 0 5px;
 }
 
 .profile .profile-area .name {
